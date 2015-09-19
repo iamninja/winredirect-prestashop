@@ -54,4 +54,10 @@ class WinbankRedirect extends PaymentModule
 		$controller = $this->getHookController('displayPayment');
 		return $controller->run($params);
 	}
+
+	public function getContent()
+	{
+		$controller = $this->getHookController('getContent');
+		return $controller->run();
+	}
 }
