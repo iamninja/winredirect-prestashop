@@ -50,7 +50,7 @@
 			<i class="icon-chevron-left"></i>
 			{l s='Other payment methods' mod='winbankredirect'}
 		</a>
-		<a class="button btn btn-default button-medium" href="#">
+		<a class="button btn btn-default button-medium" href="{$link->getModuleLink('winbankredirect','payment'|escape:'html')}">
 			<span>
 				{l s='I confirm my order' mod='winbankredirect'}
 				<i class="icon-chevron-right right"></i>
