@@ -12,6 +12,9 @@
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}
 
+{* Debug *}
+{* {$cart_methods|@print_r} *}
+
 {if $nb_products <= 0}
 	<p class="alert alert-warning">
 		{l s='Your shopping cart is empty' mod='winbankredirect'}
@@ -28,13 +31,25 @@
 			</strong>
 		</p>
 		<p>
-			- {l s='The total amount of your order is' mod='winbankredirect'}
+			{l s='The total amount of your order is' mod='winbankredirect'}
 			<span id="amount" class="price">
 				{displayPrice price=$total_amount}
 			</span>
 			{if $use_taxes == 1}
 				{l s='(tax incl.)' mod='winbankredirect'}
 			{/if}
+			<p>
+				- {l s='The total amount of the products in your cart is' mod='winbankredirect'}
+				<span id="amount" class="price">
+					{displayPrice price=$products_amount}
+				</span>
+			</p>
+			<p>
+				- {l s='For shipping you pay' mod='winbankredirect'}
+				<span id="amount" class="price">
+					{displayPrice price=$shipping_amount}
+				</span>
+			</p>
 		</p>
 		<br>
 		<p class="cheque-indent">

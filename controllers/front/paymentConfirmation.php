@@ -12,6 +12,11 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		$this->display_column_left = false;
 		$this->display_column_right = false;
 
+		// Debug
+		// $cart234 = $this->context->cart;
+		// $cart_methods = get_class_methods(new Cart());
+		// print_r(get_object_vars($this->context->cart));
+
 		// Call parent
 		parent::initContent();
 
@@ -22,7 +27,14 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		$this->context->smarty->assign(array(
 			'nb_products' => $this->context->cart->nbProducts(),
 			'total_amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
+			'shipping_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
+			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
 			'path' => $this->module->getPathUri(),
 		));
+	}
+
+	public function postProcess()
+	{
+		# code...
 	}
 }
