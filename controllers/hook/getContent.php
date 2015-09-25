@@ -18,9 +18,14 @@ class WinbankRedirectGetContentController
 	{
 		if (Tools::isSubmit('winbankredirect_form'))
 		{
-			Configuration::updateValue('WINBANKREDIRECT_CRED_ID', Tools::getValue('WINBANKREDIRECT_CRED_ID'));
+			Configuration::updateValue('WINBANKREDIRECT_CRED_ACQUIRERID', Tools::getValue('WINBANKREDIRECT_CRED_ACQUIRERID'));
+			Configuration::updateValue('WINBANKREDIRECT_CRED_MERCHANTID', Tools::getValue('WINBANKREDIRECT_CRED_MERCHANTID'));
+			Configuration::updateValue('WINBANKREDIRECT_CRED_POSID', Tools::getValue('WINBANKREDIRECT_CRED_POSID'));
+			Configuration::updateValue('WINBANKREDIRECT_CRED_USERNAME', Tools::getValue('WINBANKREDIRECT_CRED_USERNAME'));
 			Configuration::updateValue('WINBANKREDIRECT_CRED_PASSWORD', Tools::getValue('WINBANKREDIRECT_CRED_PASSWORD'));
-			Configuration::updateValue('WINBANKREDIRECT_CRED_SECRET', Tools::getValue('WINBANKREDIRECT_CRED_SECRET'));
+
+			Configuration::updateValue('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS', Tools::getValue('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS'));
+			Configuration::updateValue('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE', Tools::getValue('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE'));
 
 			Configuration::updateValue('WINBANKREDIRECT_URL_DEMO', Tools::getValue('WINBANKREDIRECT_URL_DEMO'));
 			Configuration::updateValue('WINBANKREDIRECT_URL_TEST', Tools::getValue('WINBANKREDIRECT_URL_TEST'));
@@ -36,6 +41,8 @@ class WinbankRedirectGetContentController
 			} else {
 				Configuration::updateValue('WINBANKREDIRECT_API_URL', Tools::getValue('WINBANKREDIRECT_URL_DEMO'));
 			}
+
+			$current_transactiontype = Tools::getValue('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE');
 		}
 	}
 
@@ -44,19 +51,37 @@ class WinbankRedirectGetContentController
 		// Create the arrays which will be rendered on configuration page
 		$forms_array = array(
 			array(
-				'name' => 'WINBANKREDIRECT_CRED_ID',
-				'label'	=> $this->module->l('Client ID'),
+				'name' => 'WINBANKREDIRECT_CRED_ACQUIRERID',
+				'label'	=> $this->module->l('Acquirer ID'),
+				'type' => 'text',
+				'class' => 'sm'
+			),
+			array(
+				'name' => 'WINBANKREDIRECT_CRED_MERCHANTID',
+				'label'	=> $this->module->l('Merchant ID'),
+				'type' => 'text',
+				'class' => 'sm'
+			),
+			array(
+				'name' => 'WINBANKREDIRECT_CRED_POSID',
+				'label'	=> $this->module->l('PosId'),
+				'type' => 'text',
+				'class' => 'sm'
+			),
+			array(
+				'name' => 'WINBANKREDIRECT_CRED_USERNAME',
+				'label'	=> $this->module->l('Username'),
 				'type' => 'text',
 				'class' => 'sm'
 			),
 			array(
 				'name' => 'WINBANKREDIRECT_CRED_PASSWORD',
-				'label'	=> $this->module->l('Client Password'),
+				'label'	=> $this->module->l('Password'),
 				'type' => 'text'
 			),
 			array(
-				'name' => 'WINBANKREDIRECT_CRED_SECRET',
-				'label'	=> $this->module->l('Client Secret'),
+				'name' => 'WINBANKREDIRECT_OPTS_MAXINSTALLMENTS',
+				'label'	=> $this->module->l('Maximum installments'),
 				'type' => 'text'
 			),
 			array(
@@ -98,6 +123,25 @@ class WinbankRedirectGetContentController
 					)
 				),
 			),
+			array(
+				'type' => 'radio',
+				'label' => $this->module->l('Request type:'),
+				'name' => 'WINBANKREDIRECT_OPTS_TRANSACTIONTYPE',
+				'desc' => $this->module->l('Choose whether the transaction type will be "Preauthorization" or "Sale". In case of preauthorization you have to complete the transaction in AdminTool of Piraeus Bank.'),
+				'is_bool' => false,
+				'values' => array(
+					array(
+						'id' => 'preauthorization',
+						'value' => 0,
+						'label' => $this->module->l('Preauthorization')
+					),
+					array(
+						'id' => 'sale',
+						'value' => 1,
+						'label' => $this->module->l('Sale')
+					)
+				),
+			),
 		);
 		$submit_array = array(
 			'submit' => array(
@@ -126,9 +170,13 @@ class WinbankRedirectGetContentController
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 		$helper->tpl_vars = array(
 			'fields_value' => array(
-				'WINBANKREDIRECT_CRED_ID' => Tools::getValue('WINBANKREDIRECT_CRED_ID', Configuration::get('WINBANKREDIRECT_CRED_ID')),
+				'WINBANKREDIRECT_CRED_ACQUIRERID' => Tools::getValue('WINBANKREDIRECT_CRED_ACQUIRERID', Configuration::get('WINBANKREDIRECT_CRED_ACQUIRERID')),
+				'WINBANKREDIRECT_CRED_MERCHANTID' => Tools::getValue('WINBANKREDIRECT_CRED_MERCHANTID', Configuration::get('WINBANKREDIRECT_CRED_MERCHANTID')),
+				'WINBANKREDIRECT_CRED_POSID' => Tools::getValue('WINBANKREDIRECT_CRED_POSID', Configuration::get('WINBANKREDIRECT_CRED_POSID')),
+				'WINBANKREDIRECT_CRED_USERNAME' => Tools::getValue('WINBANKREDIRECT_CRED_USERNAME', Configuration::get('WINBANKREDIRECT_CRED_USERNAME')),
 				'WINBANKREDIRECT_CRED_PASSWORD' => Tools::getValue('WINBANKREDIRECT_CRED_PASSWORD', Configuration::get('WINBANKREDIRECT_CRED_PASSWORD')),
-				'WINBANKREDIRECT_CRED_SECRET' => Tools::getValue('WINBANKREDIRECT_CRED_SECRET', Configuration::get('WINBANKREDIRECT_CRED_SECRET')),
+				'WINBANKREDIRECT_OPTS_TRANSACTIONTYPE' => Tools::getValue('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE', Configuration::get('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE')),
+				'WINBANKREDIRECT_OPTS_MAXINSTALLMENTS' => Tools::getValue('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS', Configuration::get('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS')),
 				'WINBANKREDIRECT_URL_DEMO' => Tools::getValue('WINBANKREDIRECT_URL_DEMO', Configuration::get('WINBANKREDIRECT_URL_DEMO')),
 				'WINBANKREDIRECT_URL_TEST' => Tools::getValue('WINBANKREDIRECT_URL_TEST', Configuration::get('WINBANKREDIRECT_URL_TEST')),
 				'WINBANKREDIRECT_URL_LIVE' => Tools::getValue('WINBANKREDIRECT_URL_LIVE', Configuration::get('WINBANKREDIRECT_URL_LIVE')),
