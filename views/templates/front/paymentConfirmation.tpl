@@ -13,7 +13,7 @@
 {include file="$tpl_dir./order-steps.tpl"}
 
 {* Debug *}
-{* {$cart_methods|@print_r} *}
+{* {$cart_property|@var_dump} *}
 
 {if $nb_products <= 0}
 	<p class="alert alert-warning">
@@ -50,6 +50,14 @@
 					{displayPrice price=$shipping_amount}
 				</span>
 			</p>
+			{if $number_of_installments > 1}
+				{l s='You have choosen to pay with ' mod='winbankredirect'}
+				{$number_of_installments}
+				{l s=' installments' mod='winbankredirect'}
+			{/if}
+			<p>
+
+			</p>
 		</p>
 		<br>
 		<p class="cheque-indent">
@@ -65,11 +73,27 @@
 			<i class="icon-chevron-left"></i>
 			{l s='Other payment methods' mod='winbankredirect'}
 		</a>
-		<a class="button btn btn-default button-medium" href="{$link->getModuleLink('winbankredirect','payment'|escape:'html')}">
+		<a class="button btn btn-default button-medium" id="winbankredirect-redirect-link" href="http://google.com">
 			<span>
 				{l s='I confirm my order' mod='winbankredirect'}
 				<i class="icon-chevron-right right"></i>
 			</span>
 		</a>
 	</p>
+
+	<form action="{$api_url}" style="display:none" id="winbankredirect-form" method="POST">
+		<input type="hidden" name="AcquirerId" value="{$acquirer_id}" />
+		<input type="hidden" name="MerchantId" value="{$merchant_id}" />
+		<input type="hidden" name="PosId" value="{$pos_id}" />
+		<input type="hidden" name="User" value="{$user}" />
+		<input type="hidden" name="LanguageCode" value="{$language_code}" />
+		<input type="hidden" name="MerchantReference" value="{$merchant_reference}" />
+		<input type="hidden" name="ParamBackLink" value="{$param_back_link}" />
+	</form>
+	<script>
+		$('#winbankredirect-redirect-link').click(function() {
+			$('#winbankredirect-form').submit();
+			return false;
+		});
+	</script>
 {/if}

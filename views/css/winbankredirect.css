@@ -14,3 +14,7 @@ p.payment_module a.winbankredirect:after {
 p.payment_module a.winbankredirect {
 	background: url("../img/logo-displaypayment.png") no-repeat scroll 15px 15px #fbfbfb;
 }
+
+#winbankredirect-installments {
+    z-index: 5;
+}

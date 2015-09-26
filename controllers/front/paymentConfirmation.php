@@ -16,6 +16,10 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// $cart234 = $this->context->cart;
 		// $cart_methods = get_class_methods(new Cart());
 		// print_r(get_object_vars($this->context->cart));
+		$cart_property = $this->context->cart->vagios;
+
+		// Get POST params
+		$number_of_installments = $_POST['number_of_installments'];
 
 		// Call parent
 		parent::initContent();
@@ -30,6 +34,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 			'shipping_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
 			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
 			'path' => $this->module->getPathUri(),
+			'number_of_installments' => $number_of_installments,
 		));
 	}
 
