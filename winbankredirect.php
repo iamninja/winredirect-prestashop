@@ -23,16 +23,62 @@ class WinbankRedirect extends PaymentModule
 		$this->description = $this->l('Winbank payment module, using redirect method');
 	}
 
+	public function loadSQLfile($sql_file)
+	{
+		// Get SQL file content
+		$sql_content = file_get_contents($sql_file);
+
+		// Replace PREFIX
+		$sql_content = str_replace('PREFIX_', _DB_PREFIX_, $sql_content);
+		// Create array with the SQL requests
+		$sql_requests = preg_split("/;\s*[\r\n]+/", $sql_content);
+
+		// Execute SQL requests
+		$result = true;
+		foreach ($sql_requests as $request) {
+			if (!empty($request))
+				$result &= Db::getInstance()->execute(trim($request));
+		}
+
+		// Return result
+		return $result;
+	}
+
 	public function install()
 	{
-		// Register hooks
+		// Register hooks and call parent
 		if (!parent::install() ||
 			!$this->registerHook('displayPayment') ||
 			!$this->registerHook('displayPaymentReturn'))
 				return false;
 
+		// Execute install SQL requests
+		$sql_file = dirname(__FILE__).'/install/install.sql';
+		if (!$this->loadSQLfile($sql_file))
+			return false;
+
+		// Initiate configuration values
+		// Configuration::updateValue('VALUE_NAME', 'value');
+
 		return true;
 	}
+
+	// public function uninstall()
+	// {
+	// 	// Call parent
+	// 	if (!parent::uninstall())
+	// 		return false;
+
+	// 	// Execute uninstall SQL requests
+	// 	$sql_file = dirname(__FILE__).'/install/uninstall.sql';
+	// 	if (!$this->loadSQLfile($sql_file))
+	// 		return false;
+
+	// 	// Delete configuration values
+	// 	// Configuration::deleteByName('VALUE_NAME');
+
+	// 	return true;
+	// }
 
 	public function getHookController($hook_name)
 	{
