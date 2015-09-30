@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `PREFIX_winbankredirect_transactions` (
+CREATE TABLE IF NOT EXISTS `PREFIX_winbankredirect_transaction` (
   `id_winbankredirect_transaction` int(11) NOT NULL AUTO_INCREMENT,
   `id_cart` int(11) NOT NULL,
   `installments` tinyint(1) NOT NULL,
