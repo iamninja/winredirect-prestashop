@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__).'/classes/WinbankRedirectTransaction.php')
+
 /**
 * Module's main class
 */
@@ -63,27 +65,27 @@ class WinbankRedirect extends PaymentModule
 		return true;
 	}
 
-	// public function uninstall()
-	// {
-	// 	// Call parent
-	// 	if (!parent::uninstall())
-	// 		return false;
+	public function uninstall()
+	{
+		// Call parent
+		if (!parent::uninstall())
+			return false;
 
-	// 	// Execute uninstall SQL requests
-	// 	$sql_file = dirname(__FILE__).'/install/uninstall.sql';
-	// 	if (!$this->loadSQLfile($sql_file))
-	// 		return false;
+		// Execute uninstall SQL requests
+		$sql_file = dirname(__FILE__).'/install/uninstall.sql';
+		if (!$this->loadSQLfile($sql_file))
+			return false;
 
-	// 	// Delete configuration values
-	// 	// Configuration::deleteByName('VALUE_NAME');
+		// Delete configuration values
+		// Configuration::deleteByName('VALUE_NAME');
 
-	// 	return true;
-	// }
+		return true;
+	}
 
 	public function getHookController($hook_name)
 	{
 		// Include the controller file
-		require_once(dirname(__FILE__).'/controllers/hook/'. $hook_name.'.php');
+		require_once(dirname(__FILE__).'/controllers/hook/'.$hook_name.'.php');
 
 		// Build the controller name
 		$controller_name = $this->name.$hook_name.'Controller';

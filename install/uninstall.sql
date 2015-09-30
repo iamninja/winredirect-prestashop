@@ -1,1 +1,1 @@
-DROP TABLE `PREFIX_winbankredirect_transactions`;
+DROP TABLE `PREFIX_winbankredirect_transaction`;
