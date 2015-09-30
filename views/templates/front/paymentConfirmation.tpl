@@ -7,6 +7,8 @@
 
 <h1 class="page-heading">
 	{l s='Order summary' mod='winbankredirect'}
+	{* Debug *}
+	{* foo var *} {* {$foo}vagios *}
 </h1>
 
 {assign var='current_step' value='payment'}

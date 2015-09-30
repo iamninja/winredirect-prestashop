@@ -21,6 +21,11 @@ class WinbankRedirectDisplayPaymentController
 		$total_amount = $this->context->cart->getOrderTotal(true, Cart::BOTH);
 		$number_of_installments = (int)($total_amount / 30);
 
+		// Debug
+		// Add foo variable to context
+		// $this->context->foo = "bar";
+		// print_r(get_object_vars(Context::getContext()));
+
 		// Assign cart data to smarty
 		$this->context->smarty->assign(array(
 			'nb_products' => $this->context->cart->nbProducts(),
@@ -29,6 +34,8 @@ class WinbankRedirectDisplayPaymentController
 			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
 			'path' => $this->module->getPathUri(),
 			'number_of_installments' => $number_of_installments,
+			// foo var
+			// 'foo' => $this->context->foo,
 		));
 
 		$this->context->controller->addCSS($this->_path.'views/css/winbankredirect.css', 'all');

@@ -15,8 +15,8 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// Debug
 		// $cart234 = $this->context->cart;
 		// $cart_methods = get_class_methods(new Cart());
-		// print_r(get_object_vars($this->context->cart));
-		$cart_property = $this->context->cart->vagios;
+		// print_r(get_object_vars($this->context));
+		// $foo = $this->context->foo;
 
 		// Get POST params
 		$number_of_installments = $_POST['number_of_installments'];
@@ -35,10 +35,18 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
 			'path' => $this->module->getPathUri(),
 			'number_of_installments' => $number_of_installments,
+			// foo var
+			// 'foo' => $foo,
 		));
 	}
 
 	public function postProcess()
+	{
+		// Gather data to make ticket request
+		// $foo = $this->context->cart->foo;
+	}
+
+	private function ticketRequest($params)
 	{
 		# code...
 	}

@@ -1,6 +1,8 @@
 <p class="payment_module">
 	<a href="#" id="winbankredirect-paymethod" title="{l s='Pay via Piraeus Paycenter' mod='winbankpayment'}" class="winbankredirect">
 		{l s='Pay via Piraeus Paycenter' mod='winbankredirect'}&nbsp;<span>{l s='(Redirect)' mod='winbankredirect'}</span>
+		{* Debug *}
+		{* diplay foo var *} {* {$foo} *}
 		{if $number_of_installments > 1}
 			<span>
 				Please choose first the number of installments.
