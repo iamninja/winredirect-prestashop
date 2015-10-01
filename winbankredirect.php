@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__).'/classes/WinbankRedirectTransaction.php')
+require_once(dirname(__FILE__).'/classes/WinbankRedirectTransaction.php');
 
 /**
 * Module's main class
