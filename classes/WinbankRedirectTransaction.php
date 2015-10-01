@@ -15,7 +15,7 @@ class WinbankRedirectTransaction extends ObjectModel
 	public static $definition = array(
 		'table' => 'winbankredirect_transaction',
 		'primary' => 'id_winbankredirect_transaction',
-		'multilang' => 'false',
+		'multilang' => false,
 		'fields' => array(
 			'id_cart' => array(
 				'type' => self::TYPE_INT,
@@ -51,10 +51,17 @@ class WinbankRedirectTransaction extends ObjectModel
 	// Set ticket for a transaction given the id_cart
 	public static function setTicketByCart($id_cart, $ticket)
 	{
-		Db::getInstance()->executeS('
-			UPDATE `'._DB_PREFIX_.'winbankredirect_transaction`
-			SET `ticket` = '.$ticket.'
-			WHERE `id_cart` = '.(int)$id_cart);
+		// $return = Db::getInstance()->executeS('
+		// 	UPDATE `'._DB_PREFIX_.'winbankredirect_transaction`
+		// 	SET `ticket` = '.$ticket.'
+		// 	WHERE `id_cart` = '.(int)$id_cart);
+
+		// return $return;
+
+		// Better practice
+		$data = array('ticket' => $ticket);
+		$where = 'id_cart = '.(int)$id_cart;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
 	}
 
 	// Check if a transaction has a valid ticket assigned, given the id_cart.
@@ -90,6 +97,30 @@ class WinbankRedirectTransaction extends ObjectModel
 			WHERE `id_winbankredirect_transaction` = '.$id);
 
 		return $result;
+	}
+
+	// Get transaction entry by id_cart
+	public static function getEntryByCartId($id_cart)
+	{
+		$result = Db::getInstance()->executeS('
+			SELECT * FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+			WHERE `id_cart` = '.$id_cart);
+
+		return $result;
+	}
+
+	// Delete transactions by id_cart
+	public static function deleteUnsuccessfulByCartId($id_cart)
+	{
+		// $result = Db::getInstance()->executeS('
+		// 	DELETE FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+		// 	WHERE `id_cart` = '.$id_cart' AND `successful` = 0');
+
+		// return $result;
+
+		// Better practice
+		$where = 'id_cart = '.(int)$id_cart.' AND successful = 0';
+		return Db::getInstance()->delete('winbankredirect_transaction', $where);
 	}
 }
 
