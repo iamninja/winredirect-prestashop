@@ -19,9 +19,11 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// $foo = $this->context->foo;
 
 		// Get POST params
-		$number_of_installments = 0; // default to 0
-		if ($_POST['number_of_installments'])
-			$number_of_installments = $_POST['number_of_installments'];
+		// Favoring Prestashop's Tools::getValue($key, $default_value) over using the superglobals directly
+		// $number_of_installments = 0; // default to 0
+		// if ($_POST['number_of_installments'])
+		// 	$number_of_installments = $_POST['number_of_installments'];
+		$number_of_installments = Tools::getValue('number_of_installments', 0);
 
 		// Call parent
 		parent::initContent();
@@ -80,7 +82,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 	{
 		$WinbankRedirectTransaction = new WinbankRedirectTransaction();
 		$WinbankRedirectTransaction->id_cart = $this->context->cart->id;
-		$WinbankRedirectTransaction->installments = $_POST['number_of_installments'] ?: 0;
+		$WinbankRedirectTransaction->installments = Tools::getValue('number_of_installments', 0);
 		// Temporarily. Assign ticket on creation
 		$WinbankRedirectTransaction->ticket = $this->ticketRequest();
 		$WinbankRedirectTransaction->successful = 0;
