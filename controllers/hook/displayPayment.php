@@ -19,7 +19,11 @@ class WinbankRedirectDisplayPaymentController
 	{
 		// Check if the cart is qualified for installments
 		$total_amount = $this->context->cart->getOrderTotal(true, Cart::BOTH);
-		$number_of_installments = (int)($total_amount / 30);
+		$max_installments = Configuration::get('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS');
+		if ($max_installments > ($total_amount / 30))
+			$number_of_installments = (int)($total_amount / 30);
+		else
+			$number_of_installments = $max_installments;
 
 		// Debug
 		// Add foo variable to context
@@ -32,6 +36,7 @@ class WinbankRedirectDisplayPaymentController
 			'total_amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
 			'shipping_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
 			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
+			'max_installments' => Configuration::get('WINBANKREDIRECT_OPTS_MAXINSTALLMENTS'),
 			'path' => $this->module->getPathUri(),
 			'number_of_installments' => $number_of_installments,
 			// foo var
