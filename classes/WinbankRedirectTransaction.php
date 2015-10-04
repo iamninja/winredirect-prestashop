@@ -127,5 +127,15 @@ class WinbankRedirectTransaction extends ObjectModel
 		$where = 'id_cart = '.(int)$id_cart.' AND successful = 0';
 		return Db::getInstance()->delete('winbankredirect_transaction', $where);
 	}
+
+	// Get merchant reference by id_cart
+	public static function getMerchantReferenceByCartId($id_cart)
+	{
+		$merchant_reference = Db::getInstance()->executeS('
+			SELECT `merchant_reference` FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+			WHERE `id_cart` = '.(int)$id_cart);
+
+		return $merchant_reference[0]['merchant_reference'];
+	}
 }
 

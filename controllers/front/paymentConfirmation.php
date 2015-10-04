@@ -31,6 +31,23 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// Set template to use
 		$this->setTemplate('paymentConfirmation.tpl');
 
+		// Get cart id
+		$id_cart = $this->context->cart->id;
+
+		// Set language code
+		// TODO Make it a little more general?
+		// Accepted values: en-US, el-GR, ru-RU, de-DE
+		$language_code = $this->context->language->language_code;
+
+		// Get merchant reference
+		$merchant_reference = WinbankRedirectTransaction::getMerchantReferenceByCartId($id_cart);
+
+		// Set params to be sent with the bank link
+		$param_back_link = '';
+
+		// Set URL to make POST request
+		$api_url = '';
+
 		// Assign cart data to smarty
 		$this->context->smarty->assign(array(
 			'nb_products' => $this->context->cart->nbProducts(),
@@ -38,9 +55,15 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 			'shipping_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING),
 			'products_amount' => $this->context->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING),
 			'path' => $this->module->getPathUri(),
+			'api_url' => $api_url,
 			'number_of_installments' => $number_of_installments,
-			// foo var
-			// 'foo' => $foo,
+			'acquirer_id' => Configuration::get('WINBANKREDIRECT_CRED_ACQUIRERID'),
+			'merchant_id' => Configuration::get('WINBANKREDIRECT_CRED_MERCHANTID'),
+			'pos_id' => Configuration::get('WINBANKREDIRECT_CRED_POSID'),
+			'user' => Configuration::get('WINBANKREDIRECT_CRED_USERNAME'),
+			'language_code' => $language_code,
+			'merchant_reference' => $merchant_reference,
+			'param_back_link' => $param_back_link
 		));
 	}
 
@@ -101,6 +124,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// All in one for temporarily
 		$id_cart = $this->context->cart->id;
 		// delete all instead of checking for existance
+		// TODO deletion should not be happening here. Existance and overwrite should not be used. Delete or cart related entries which are unsuccessful at validation
 		WinbankRedirectTransaction::deleteUnsuccessfulByCartId($id_cart);
 		// Generate merchant reference
 		$merchantReference = $this->generateMerchantReference();
