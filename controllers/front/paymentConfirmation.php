@@ -152,7 +152,10 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 
 	private function generateMerchantReference()
 	{
-		$merchantReference = date("dmYHis");
+		$shop_and_customer_id =
+			$this->context->customer->id_shop.
+			$this->context->customer->id;
+		$merchantReference = $shop_and_customer_id.date("dmYHis");
 		return $merchantReference;
 	}
 
