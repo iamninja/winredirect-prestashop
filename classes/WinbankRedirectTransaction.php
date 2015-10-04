@@ -8,6 +8,7 @@ class WinbankRedirectTransaction extends ObjectModel
 {
 	public $id_winbankredirect_transaction;
 	public $id_cart;
+	public $merchantReference;
 	public $installments;
 	public $ticket;
 	public $successful;
@@ -20,6 +21,10 @@ class WinbankRedirectTransaction extends ObjectModel
 			'id_cart' => array(
 				'type' => self::TYPE_INT,
 				'validate' => 'isUnsignedId',
+				'required' => true
+			),
+			'merchant_reference' => array(
+				'type' => self::TYPE_STRING,
 				'required' => true
 			),
 			'installments' => array(

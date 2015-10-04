@@ -47,7 +47,45 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 	public function postProcess()
 	{
 		// Gather data
+		// Set request type
+		if (Configuration::get('WINBANKREDIRECT_OPTS_TRANSACTIONTYPE') == 0)
+		{
+			$requestType = '00'; // preauthorization
+			$expirePreauth = 30; // hardcode max possible value
+		}
+		else
+		{
+			$requestType = '02'; // sale
+			$expirePreauth = 0;
+		}
+		// Generate merchant reference
+		$merchantReference = $this->generateMerchantReference();
 
+		// Total amount to pay
+		$total_amount = $this->context->cart->getOrderTotal(true, Cart::BOTH);
+
+		// Number of installments
+		// TODO Add extra check here if the number is valid
+		$number_of_installments = Tools::getValue('number_of_installments', 0);
+
+		// Parameters to send back
+		$parameters = 'number_of_installments='.$number_of_installments;
+
+		$data = array(
+			'AcquirerId' => Configuration::get('WINBANKREDIRECT_CRED_ACQUIRERID'),
+			'MerchantId' => Configuration::get('WINBANKREDIRECT_CRED_MERCHANTID'),
+			'PosId' => Configuration::get('WINBANKREDIRECT_CRED_POSID'),
+			'Username' => Configuration::get('WINBANKREDIRECT_CRED_USERNAME'),
+			'Password' => Configuration::get('WINBANKREDIRECT_CRED_PASSWORD'),
+			'RequestType' => $requestType,
+			'CurrencyCode' => 978, // hardcoded to Euro
+			'MerchantReference' => $merchantReference,
+			'Amount' => (float)$total_amount,
+			'Installments' => (int)$number_of_installments,
+			'ExpirePreauth' => (int)$expirePreauth,
+			'Bnpl' => 0, // hardcode value. Unused variable
+			'Parameters' => $parameters
+		);
 
 		// Hash data
 
@@ -64,7 +102,12 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		$id_cart = $this->context->cart->id;
 		// delete all instead of checking for existance
 		WinbankRedirectTransaction::deleteUnsuccessfulByCartId($id_cart);
-		$this->createTransactionEntry();
+		// Generate merchant reference
+		$merchantReference = $this->generateMerchantReference();
+		// Create transaction entry
+		$this->createTransactionEntry($merchantReference);
+		// Set ticket on previous entry
+		WinbankRedirectTransaction::setTicketByCart($id_cart, $this->ticketRequest());
 	}
 
 	private function ticketRequest()
@@ -76,15 +119,25 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 
 		$ticket = hash('sha256', $source);
 		return $ticket;
+
+		// Create new soap client instance
+		// $client = new SoapClient('https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx?WSDL');
+
+
 	}
 
-	private function createTransactionEntry()
+	private function generateMerchantReference()
+	{
+		$merchantReference = date("dmYHis");
+		return $merchantReference;
+	}
+
+	private function createTransactionEntry($merchantReference)
 	{
 		$WinbankRedirectTransaction = new WinbankRedirectTransaction();
 		$WinbankRedirectTransaction->id_cart = $this->context->cart->id;
+		$WinbankRedirectTransaction->merchant_reference = $merchantReference;
 		$WinbankRedirectTransaction->installments = Tools::getValue('number_of_installments', 0);
-		// Temporarily. Assign ticket on creation
-		$WinbankRedirectTransaction->ticket = $this->ticketRequest();
 		$WinbankRedirectTransaction->successful = 0;
 		$WinbankRedirectTransaction->add();
 	}
