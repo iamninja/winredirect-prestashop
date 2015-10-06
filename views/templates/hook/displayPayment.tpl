@@ -1,15 +1,18 @@
-<p class="payment_module">
+<p class="payment_module" style="padding-bottom:10px;">
 	<a href="#" id="winbankredirect-paymethod" title="{l s='Pay via Piraeus Paycenter' mod='winbankpayment'}" class="winbankredirect">
 		{l s='Pay via Piraeus Paycenter' mod='winbankredirect'}&nbsp;<span>{l s='(Redirect)' mod='winbankredirect'}</span>
 		{* Debug *}
 		{* diplay foo var *} {* {$foo} *}
-		{if $number_of_installments > 1}
-			<span>
-				Please choose first the number of installments.
-			</span>
-		{/if}
 	</a>
-	<p>
+	{if $number_of_installments > 1}
+		<span>
+			Please choose first the number of installments.
+		</span>
+		<br><br><br>
+		<span style="padding-right:10px">{l s='Number of installments:' mod='winbankredirect'}</span><input id="installments-sl" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="{$number_of_installments}" data-slider-step="1"  form="winbankredirect-installments"  name="number_of_installments" />
+	{/if}
+
+	{*<p>
 	Number={$number_of_installments}
 	{if $number_of_installments > 1}
 		<br>
@@ -21,17 +24,11 @@
 			</strong>
 		</p>
 		<span>Number of installments:</span>
-		<div class="btn-group" data-toggle="buttons">
-		 	{for $number=0 to $number_of_installments}
-				{if $number!=1}
-					<label class="btn btn-primary">
-						<input type="radio" name="number_of_installments" form="winbankredirect-installments" id="installments{$number}"value="{$number}" autocomplete="off" {if $number == 0}checked{/if}> {$number}
-					</label>
-				{/if}
-		 	{/for}
+		<div class="well">
+			<input id="installments-sl" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="{$number_of_installments}" data-slider-step="1"  form="winbankredirect-installments"  name="number_of_installments" />
 		</div>
 	{/if}
-	</p>
+	</p>*}
 </p>
 
 <form action="{$link->getModuleLink('winbankredirect','paymentConfirmation'|escape:'html')}" style="display:none" id="winbankredirect-installments" method="POST">
