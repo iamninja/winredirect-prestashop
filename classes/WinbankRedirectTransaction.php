@@ -43,6 +43,11 @@ class WinbankRedirectTransaction extends ObjectModel
 			'ticket' => array(
 				'type' => self::TYPE_STRING
 			),
+			'is_preauthorization' => array(
+				'type' => self::TYPE_BOOL,
+				'validate' => 'isUnsignedInt',
+				'required' => true
+			),
 			'successful' => array(
 				'type' => self::TYPE_BOOL,
 				'validate' => 'isUnsignedInt',
