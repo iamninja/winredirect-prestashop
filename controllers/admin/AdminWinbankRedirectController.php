@@ -24,9 +24,13 @@ class AdminWinbankRedirectController extends ModuleAdminController
 				'title' => $this->l('Order ID'),
 				'width' => 25
 			),
+			'current_state' => array(
+				'title' => $this->l('Status'),
+				'width' => 120
+			),
 			'merchant_reference' => array(
 				'title' => $this->l('Merchant Reference'),
-				'width' => 150
+				'width' => 120
 			),
 			'installments' => array(
 				'title' => $this->l('Installments'),

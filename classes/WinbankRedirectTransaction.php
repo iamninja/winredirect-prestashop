@@ -27,6 +27,10 @@ class WinbankRedirectTransaction extends ObjectModel
 				'type' => self::TYPE_INT,
 				'validate' => 'isUnsignedId'
 			),
+			'current_state' => array(
+				'type' => self::TYPE_INT,
+				'validate' => 'isUnsignedId'
+			),
 			'merchant_reference' => array(
 				'type' => self::TYPE_STRING,
 				'required' => true
