@@ -79,7 +79,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		else
 		{
 			$requestType = '02'; // sale
-			$expirePreauth = 0;
+			$expirePreauth = 0; // have to be 0 in this case
 		}
 		// Generate merchant reference
 		$merchantReference = $this->generateMerchantReference();
@@ -110,16 +110,24 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 			'Parameters' => $parameters
 		);
 
+		// Get ticket
+		$response = $this->ticketRequest($data);
+		// print_r($response);
+
+		if ($response->IssueNewTicketResult->ResultCode == 0)
+			$tran_ticket = $response->IssueNewTicketResult->TranTicket;
+		else
+		{
+			// Temporarily
+			$trans_ticket = 'ticket_error';
+			$error_message = $response->IssueNewTicketResult->ResultDescription;
+			// $this->returnError($error_message);
+		}
+
 		// Hash data
 
 
 		// Create database entry for this id_cart if not exists
-
-		//Get ticket
-		// $ticket = $this->ticketRequest();
-
-		// Save ticket to database
-		// WinbankRedirectTransaction::setTicketByCart($id_cart, $ticket);
 
 		// All in one for temporarily
 		$id_cart = $this->context->cart->id;
@@ -131,23 +139,30 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// Create transaction entry
 		$this->createTransactionEntry($merchantReference);
 		// Set ticket on previous entry
-		WinbankRedirectTransaction::setTicketByCart($id_cart, $this->ticketRequest());
+		WinbankRedirectTransaction::setTicketByCart($id_cart, $trans_ticket);
 	}
 
-	private function ticketRequest()
+	private function ticketRequest($data)
 	{
 		// For now generate a random hash
-		$source = '';
-		for ($i = 1; $i < 10; $i++)
-			$source .= mt_rand(0, 9);
+		// $source = '';
+		// for ($i = 1; $i < 10; $i++)
+		// 	$source .= mt_rand(0, 9);
 
-		$ticket = hash('sha256', $source);
-		return $ticket;
+		// $ticket = hash('sha256', $source);
+		// return $ticket;
 
 		// Create new soap client instance
-		// $client = new SoapClient('https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx?WSDL');
+		$params = array(
+			'trace' => 1,
+			'exceptions' => 0,
+			'use' => SOAP_LITERAL,
+			'style' => SOAP_DOCUMENT
+		);
+		$client = new SoapClient('https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx?WSDL', $params);
 
-
+		$response = $client->IssueNewTicket(array('Request' => $data));
+		return $response;
 	}
 
 	private function generateMerchantReference()
@@ -181,4 +196,9 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		WinbankRedirectTransaction::deleteSelection($ids);
 	}
 
+	public function returnError($result)
+	{
+		echo json_encode(array('error' => $result));
+		exit;
+	}
 }
