@@ -59,6 +59,10 @@ class WinbankRedirect extends PaymentModule
 		if (!$this->loadSQLfile($sql_file))
 			return false;
 
+		// Install admin tab
+		if (!$this->installAdminTab('AdminOrders', 'AdminWinbankRedirect', $this->l('Winbank Redirect')))
+			return false;
+
 		// Initiate configuration values
 		// Configuration::updateValue('VALUE_NAME', 'value');
 
@@ -78,6 +82,10 @@ class WinbankRedirect extends PaymentModule
 		// Execute uninstall SQL requests
 		$sql_file = dirname(__FILE__).'/install/uninstall.sql';
 		if (!$this->loadSQLfile($sql_file))
+			return false;
+
+		// Uninstall admin tab
+		if (!$this->uninstallAdminTab('AdminWinbankRedirect'))
 			return false;
 
 		// Delete configuration values
@@ -119,6 +127,34 @@ class WinbankRedirect extends PaymentModule
 				return false;
 		}
 		return true;
+	}
+
+	public function installAdminTab($parent, $class_name, $name)
+	{
+		// Create new admin tab
+		$tab = new Tab();
+		// Get the parent's id
+		$tab->id_parent = (int)Tab::getIdFromClassName($parent);
+		// Set name (multilanguage)
+		$tab->name = array();
+		foreach (Language::getLanguages(true) as $lang)
+			$tab->name[$lang['id_lang']] = $name;
+		// More attributes
+		$tab->class_name = $class_name; // controller's name without the Controller suffix
+		$tab->module = $this->name;
+		$tab->active = 1;
+		// Add tab and return
+		return $tab->add();
+	}
+
+	public function uninstallAdminTab($class_name)
+	{
+		// Retrieve tab id
+		$id_tab = (int)Tab::getIdFromClassName($class_name);
+		// Get the tab
+		$tab = new Tab((int)$id_tab);
+		// Delete the tab
+		return $tab->delete();
 	}
 
 	public function getHookController($hook_name)
