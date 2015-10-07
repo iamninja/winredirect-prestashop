@@ -154,7 +154,7 @@ class WinbankRedirectTransaction extends ObjectModel
 	// Set id_order by id_cart
 	public static function setOrderIdByCartId($id_cart, $id_order)
 	{
-		$data = array('id_order' => $id_order);
+		$data = array('id_order' => (int)$id_order);
 		$where = 'id_cart = '.(int)$id_cart;
 		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
 	}
@@ -204,6 +204,13 @@ class WinbankRedirectTransaction extends ObjectModel
 
 		$row = Db::getInstance()->getRow($sql);
 		return $row;
+	}
+
+	public static function setSuccessfulByOrderId($id_order, $is_successful)
+	{
+		$data = array('successful' => $is_successful);
+		$where = 'id_order = '.(int)$id_order;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
 	}
 }
 
