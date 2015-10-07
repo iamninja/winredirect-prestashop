@@ -194,5 +194,16 @@ class WinbankRedirectTransaction extends ObjectModel
 
 		return $id_order[0]['id_order'];
 	}
+
+	// Get entry by id_order
+	public static function getRowByOrderId($id_order)
+	{
+		$sql = '
+		SELECT * FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+		WHERE `id_order` = '.(int)$id_order;
+
+		$row = Db::getInstance()->getRow($sql);
+		return $row;
+	}
 }
 

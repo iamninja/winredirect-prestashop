@@ -51,7 +51,8 @@ class WinbankRedirect extends PaymentModule
 		// Register hooks and call parent
 		if (!parent::install() ||
 			!$this->registerHook('displayPayment') ||
-			!$this->registerHook('displayPaymentReturn'))
+			!$this->registerHook('displayPaymentReturn') ||
+			!$this->registerHook('displayAdminOrder'))
 				return false;
 
 		// Execute install SQL requests
@@ -175,6 +176,12 @@ class WinbankRedirect extends PaymentModule
 	public function hookDisplayPayment($params)
 	{
 		$controller = $this->getHookController('displayPayment');
+		return $controller->run($params);
+	}
+
+	public function hookDisplayAdminOrder($params)
+	{
+		$controller = $this->getHookController('displayAdminOrder');
 		return $controller->run($params);
 	}
 
