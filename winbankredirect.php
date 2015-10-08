@@ -53,7 +53,8 @@ class WinbankRedirect extends PaymentModule
 			!$this->registerHook('displayPayment') ||
 			!$this->registerHook('displayPaymentReturn') ||
 			!$this->registerHook('displayAdminOrder') ||
-			!$this->registerHook('actionValidateOrder'))
+			!$this->registerHook('actionValidateOrder') ||
+			!$this->registerHook('actionOrderStatusPostupdate'))
 				return false;
 
 		// Execute install SQL requests
@@ -189,6 +190,12 @@ class WinbankRedirect extends PaymentModule
 	public function hookActionValidateOrder($params)
 	{
 		$controller = $this->getHookController('actionValidateOrder');
+		return $controller->run($params);
+	}
+
+	public function hookActionOrderStatusPostUpdate($params)
+	{
+		$controller = $this->getHookController('actionOrderStatusPostupdate');
 		return $controller->run($params);
 	}
 
