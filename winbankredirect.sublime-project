@@ -1,0 +1,21 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"settings":
+	{
+        // Whitespace and Indentation
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true,
+		"auto_indent": true,
+		"use_tab_stops": true,
+		"trim_automatic_white_space": true,
+		"detect_indentation": true,
+		"trim_trailing_white_space_on_save": true,
+        // Automatic Behavior
+        "ensure_newline_at_eof_on_save": true
+	}
+}
