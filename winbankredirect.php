@@ -29,7 +29,7 @@ class WinbankRedirect extends PaymentModule
     public function loadSQLfile($sql_file)
     {
         // Get SQL file content
-        $sql_content = file_get_contents($sql_file);
+        $sql_content = Tools::file_get_contents($sql_file);
 
         // Replace PREFIX
         $sql_content = str_replace('PREFIX_', _DB_PREFIX_, $sql_content);

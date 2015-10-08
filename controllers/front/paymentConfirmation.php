@@ -198,7 +198,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 
     public function returnError($result)
     {
-        echo json_encode(array('error' => $result));
+        echo Tools::json_encode(array('error' => $result));
         exit;
     }
 }

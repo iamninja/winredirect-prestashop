@@ -57,13 +57,13 @@ class WinbankRedirectValidationModuleFrontController extends ModuleFrontControll
 
 	public function returnError($result)
 	{
-		echo json_encode(array('error' => $result));
+		echo Tools::json_encode(array('error' => $result));
 		exit;
 	}
 
 	public function returnSuccess($result)
 	{
-		echo json_encode(array('retrun_link' => $result));
+		echo Tools::json_encode(array('retrun_link' => $result));
 	}
 
 	public function haskKeyCalculation($data = Tools::getAllValues())
