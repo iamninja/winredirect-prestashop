@@ -16,6 +16,16 @@
 		"detect_indentation": true,
 		"trim_trailing_white_space_on_save": true,
         // Automatic Behavior
-        "ensure_newline_at_eof_on_save": true
-	}
+        "ensure_newline_at_eof_on_save": true,
+        // php-cs-fixer
+        "show_panel_on_build": false
+	},
+    "build_systems":
+    [
+        {
+            "name": "php-cs-fixer",
+            "path": "vendor/bin",
+            "shell_cmd": "php-cs-fixer fix '$file' --level=psr2"
+        }
+    ]
 }
