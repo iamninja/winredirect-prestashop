@@ -58,11 +58,20 @@ class AdminWinbankRedirectController extends ModuleAdminController
 				'title' => $this->l('Preauthorization'),
 				'width' => 10,
 				'align' => 'center',
-				'type' => 'bool'
-			)
+				'type' => 'bool',
+				'callback' => 'showYesNo'
+			),
+			'successful' => array(
+				'title' => $this->l('Successful'),
+				'width' => 10,
+				'align' => 'center',
+				'type' => 'bool',
+				'callback' => 'showYesNo'
+			),
 		);
 
-		$this->_where = 'AND a.`successful` = 1';
+		// Maybe it's better to show unsuccessful transactions too (for "debugging", using merchant_reference)
+		// $this->_where = 'AND a.`successful` = 1';
 
 		$this->_join = '
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = a.`current_state`)
@@ -113,5 +122,13 @@ class AdminWinbankRedirectController extends ModuleAdminController
         }
 
     	return $statuses_array[$echo];
+    }
+
+    public function showYesNo($echo, $tr)
+    {
+    	if ($echo == 0)
+    		return "No";
+    	else
+    		return "Yes";
     }
 }
