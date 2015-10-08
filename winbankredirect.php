@@ -12,7 +12,7 @@ class WinbankRedirect extends PaymentModule
     public function __construct()
     {
         // Module details
-        $this->name = 'winbankredirect';
+        $this->name = 'winbank_redirect';
         $this->tab = 'payments_gateways';
         $this->version = '0.3.1';
         $this->author = 'Vagios Vlachos';
