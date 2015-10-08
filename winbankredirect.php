@@ -1,6 +1,7 @@
 <?php
-if (!defined('_PS_VERSION_'))
+if (!defined('_PS_VERSION_')) {
     exit;
+}
 
 require_once(dirname(__FILE__).'/classes/WinbankRedirectTransaction.php');
 
@@ -130,8 +131,14 @@ class WinbankRedirect extends PaymentModule
                 Configuration::updateValue('PS_OS_WINBANKREDIRECT_PREAUTHORIZATION', $order_state->id);
 
                 // Copy the module's logo in the order state logo directory
-                copy(dirname(__FILE__).'/logo.png', dirname(__FILE__).'/../../img/os/'.$order_state->id.'.png');
-                copy(dirname(__FILE__).'/logo.png', dirname(__FILE__).'/../../img/tmp/order_state_mini_'.$order_state->id.'/logo.png');
+                copy(
+                    dirname(__FILE__).'/logo.png',
+                    dirname(__FILE__).'/../../img/os/'.$order_state->id.'.png'
+                );
+                copy(
+                    dirname(__FILE__).'/logo.png',
+                    dirname(__FILE__).'/../../img/tmp/order_state_mini_'.$order_state->id.'/logo.png'
+                );
             } else {
                 return false;
             }

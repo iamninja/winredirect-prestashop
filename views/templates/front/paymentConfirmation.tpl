@@ -28,7 +28,7 @@
 		</h3>
 		<p class="cheque-indent">
 			<strong class="dark">
-				{l s='You have chosen to pay with Winbank Redirect Method.' mod='winbankredirect'}
+				{l s='You have chosen to pay with Winbank Redirect Method.' mod='winbank_redirect'}
 				{l s='Here is a short summary of your order:' mod='winbank_redirect'}
 			</strong>
 		</p>
@@ -41,7 +41,7 @@
 				{l s='(tax incl.)' mod='winbank_redirect'}
 			{/if}
 			<p>
-				- {l s='The total amount of the products in your cart is' mod='winbankredirect'}
+				- {l s='The total amount of the products in your cart is' mod='winbank_redirect'}
 				<span id="amount" class="price">
 					{displayPrice price=$products_amount}
 				</span>
@@ -54,7 +54,7 @@
 			</p>
 			{if $number_of_installments > 1}
 				{l s='You have choosen to pay with ' mod='winbank_redirect'}
-				{$number_of_installments}
+				{$number_of_installments|escape:'htmlall':'UTF-8'}
 				{l s=' installments' mod='winbank_redirect'}
 			{/if}
 			<p>
@@ -83,14 +83,14 @@
 		</a>
 	</p>
 
-	<form action="{$api_url}" style="display:none" id="winbankredirect-form" method="POST">
-		<input type="hidden" name="AcquirerId" value="{$acquirer_id}" />
-		<input type="hidden" name="MerchantId" value="{$merchant_id}" />
-		<input type="hidden" name="PosId" value="{$pos_id}" />
-		<input type="hidden" name="User" value="{$user}" />
-		<input type="hidden" name="LanguageCode" value="{$language_code}" />
-		<input type="hidden" name="MerchantReference" value="{$merchant_reference}" />
-		<input type="hidden" name="ParamBackLink" value="{$param_back_link}" />
+	<form action="{$api_url|escape:'htmlall':'UTF-8'}" style="display:none" id="winbankredirect-form" method="POST">
+		<input type="hidden" name="AcquirerId" value="{$acquirer_id|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="MerchantId" value="{$merchant_id|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="PosId" value="{$pos_id|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="User" value="{$user|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="LanguageCode" value="{$language_code|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="MerchantReference" value="{$merchant_reference|escape:'htmlall':'UTF-8'}" />
+		<input type="hidden" name="ParamBackLink" value="{$param_back_link|escape:'htmlall':'UTF-8'}" />
 	</form>
 	<script>
 		$('#winbankredirect-redirect-link').click(function() {

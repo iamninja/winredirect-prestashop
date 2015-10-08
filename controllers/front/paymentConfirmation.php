@@ -129,7 +129,9 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
         // All in one for temporarily
         $id_cart = $this->context->cart->id;
         // delete all instead of checking for existance
-        // TODO deletion should not be happening here. Existance and overwrite should not be used. Delete or cart related entries which are unsuccessful at validation
+        // TODO deletion should not be happening here.
+        // Existance and overwrite should not be used.
+        // Delete or cart related entries which are unsuccessful at validation
         WinbankRedirectTransaction::deleteUnsuccessfulByCartId($id_cart);
         // Generate merchant reference
         $merchantReference = $this->generateMerchantReference();

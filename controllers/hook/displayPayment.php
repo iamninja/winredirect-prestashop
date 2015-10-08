@@ -44,7 +44,7 @@ class WinbankRedirectDisplayPaymentController
         ));
 
         $this->context->controller->addCSS($this->_path.'views/css/winbankredirect.css', 'all');
-        $this->context->controller->addJS($this->_path.'views/js/bootstrap-slider.min.js');
+        $this->context->controller->addJS($this->_path.'views/js/bootstrap-slider.js');
         $this->context->controller->addJS($this->_path.'views/js/displayPayment.js');
         return $this->module->display($this->file, 'displayPayment.tpl');
     }

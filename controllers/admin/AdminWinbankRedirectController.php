@@ -19,6 +19,7 @@ class AdminWinbankRedirectController extends ModuleAdminController
         parent::__construct();
 
         // Get order states names
+        $statuses_array = array();
         $statuses = OrderState::getOrderStates((int)$this->context->language->id);
         foreach ($statuses as $status) {
             $statuses_array[$status['id_order_state']] = $status['name'];
@@ -75,7 +76,8 @@ class AdminWinbankRedirectController extends ModuleAdminController
 
         $this->_join = '
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = a.`current_state`)
-			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)$this->context->language->id.')';
+			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state`
+            AND osl.`id_lang` = '.(int)$this->context->language->id.')';
     }
 
     public function renderView()
@@ -100,6 +102,7 @@ class AdminWinbankRedirectController extends ModuleAdminController
     public function renderList()
     {
         // Get order states names
+        $statuses_array = array();
         $statuses = OrderState::getOrderStates((int)$this->context->language->id);
         foreach ($statuses as $status) {
             $statuses_array[$status['id_order_state']] = $status['name'];
@@ -116,6 +119,7 @@ class AdminWinbankRedirectController extends ModuleAdminController
     public function getOrderStateName($echo, $tr)
     {
         // Get order states names
+        $statuses_array = array();
         $statuses = OrderState::getOrderStates((int)$this->context->language->id);
         foreach ($statuses as $status) {
             $statuses_array[$status['id_order_state']] = $status['name'];
