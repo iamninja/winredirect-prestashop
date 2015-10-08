@@ -1,18 +1,20 @@
 <?php
+if (!defined('_PS_VERSION_'))
+    exit;
 
 require_once(dirname(__FILE__).'/classes/WinbankRedirectTransaction.php');
 
 /**
 * Module's main class
 */
-class winbankredirect extends PaymentModule
+class WinbankRedirect extends PaymentModule
 {
     public function __construct()
     {
         // Module details
         $this->name = 'winbankredirect';
-        $this->tab = 'payment_gateways';
-        $this->version = '0.1';
+        $this->tab = 'payments_gateways';
+        $this->version = '0.3.1';
         $this->author = 'Vagios Vlachos';
         $this->bootstrap = true;
 
