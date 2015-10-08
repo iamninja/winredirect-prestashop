@@ -75,11 +75,13 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		{
 			$requestType = '00'; // preauthorization
 			$expirePreauth = 30; // hardcode max possible value
+			$is_preauthorization = 1;
 		}
 		else
 		{
 			$requestType = '02'; // sale
 			$expirePreauth = 0; // have to be 0 in this case
+			$is_preauthorization = 0;
 		}
 		// Generate merchant reference
 		$merchantReference = $this->generateMerchantReference();
@@ -137,7 +139,7 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		// Generate merchant reference
 		$merchantReference = $this->generateMerchantReference();
 		// Create transaction entry
-		$this->createTransactionEntry($merchantReference);
+		$this->createTransactionEntry($merchantReference, $is_preauthorization);
 		// Set ticket on previous entry
 		WinbankRedirectTransaction::setTicketByCart($id_cart, $trans_ticket);
 	}
@@ -174,12 +176,15 @@ class WinbankRedirectPaymentConfirmationModuleFrontController extends ModuleFron
 		return $merchantReference;
 	}
 
-	private function createTransactionEntry($merchantReference)
+	private function createTransactionEntry($merchantReference, $is_preauthorization)
 	{
 		$WinbankRedirectTransaction = new WinbankRedirectTransaction();
 		$WinbankRedirectTransaction->id_cart = $this->context->cart->id;
+		$WinbankRedirectTransaction->id_order = 0;
+		$WinbankRedirectTransaction->current_state = 0;
 		$WinbankRedirectTransaction->merchant_reference = $merchantReference;
 		$WinbankRedirectTransaction->installments = Tools::getValue('number_of_installments', 0);
+		$WinbankRedirectTransaction->is_preauthorization = $is_preauthorization;
 		$WinbankRedirectTransaction->successful = 0;
 		$WinbankRedirectTransaction->add();
 	}

@@ -23,6 +23,14 @@ class WinbankRedirectTransaction extends ObjectModel
 				'validate' => 'isUnsignedId',
 				'required' => true
 			),
+			'id_order' => array(
+				'type' => self::TYPE_INT,
+				'validate' => 'isUnsignedId'
+			),
+			'current_state' => array(
+				'type' => self::TYPE_INT,
+				'validate' => 'isUnsignedId'
+			),
 			'merchant_reference' => array(
 				'type' => self::TYPE_STRING,
 				'required' => true
@@ -34,6 +42,11 @@ class WinbankRedirectTransaction extends ObjectModel
 			),
 			'ticket' => array(
 				'type' => self::TYPE_STRING
+			),
+			'is_preauthorization' => array(
+				'type' => self::TYPE_BOOL,
+				'validate' => 'isUnsignedInt',
+				'required' => true
 			),
 			'successful' => array(
 				'type' => self::TYPE_BOOL,
@@ -136,6 +149,68 @@ class WinbankRedirectTransaction extends ObjectModel
 			WHERE `id_cart` = '.(int)$id_cart);
 
 		return $merchant_reference[0]['merchant_reference'];
+	}
+
+	// Set id_order by id_cart
+	public static function setOrderIdByCartId($id_cart, $id_order)
+	{
+		$data = array('id_order' => (int)$id_order);
+		$where = 'id_cart = '.(int)$id_cart;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
+	}
+
+	// Set current_state by id_cart
+	public static function setCurrentStateByCartId($id_cart, $current_state)
+	{
+		$data = array('current_state' => $current_state);
+		$where = 'id_cart = '.(int)$id_cart;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
+	}
+
+	// Set current_state by id_order
+	public static function setCurrentStateByOrderId($id_order, $current_state)
+	{
+		$data = array('current_state' => $current_state);
+		$where = 'id_order = '.(int)$id_order;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
+	}
+
+	// Get current_state by id
+	public static function getCurrentStateById($id)
+	{
+		$current_state = Db::getInstance()->executeS('
+			SELECT `current_state` FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+			WHERE `id_winbankredirect_transaction` = '.(int)$id);
+
+		return $current_state[0]['current_state'];
+	}
+
+	// Get id_order by id
+	public static function getOrderIdById($id)
+	{
+		$id_order = Db::getInstance()->executeS('
+			SELECT `id_order` FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+			WHERE `id_winbankredirect_transaction` = '.(int)$id);
+
+		return $id_order[0]['id_order'];
+	}
+
+	// Get entry by id_order
+	public static function getRowByOrderId($id_order)
+	{
+		$sql = '
+		SELECT * FROM `'._DB_PREFIX_.'winbankredirect_transaction`
+		WHERE `id_order` = '.(int)$id_order;
+
+		$row = Db::getInstance()->getRow($sql);
+		return $row;
+	}
+
+	public static function setSuccessfulByOrderId($id_order, $is_successful)
+	{
+		$data = array('successful' => $is_successful);
+		$where = 'id_order = '.(int)$id_order;
+		return Db::getInstance()->update('winbankredirect_transaction', $data, $where);
 	}
 }
 
