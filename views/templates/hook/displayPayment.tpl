@@ -1,6 +1,6 @@
 <p class="payment_module" style="padding-bottom:10px;">
-	<a href="#" id="winbankredirect-paymethod" title="{l s='Pay via Piraeus Paycenter' mod='winbank_redirect'}" class="winbankredirect">
-		{l s='Pay via Piraeus Paycenter' mod='winbank_redirect'}&nbsp;<span>{l s='(Redirect)' mod='winbank_redirect'}</span>
+	<a href="#" id="winbankredirect-paymethod" title="{l s='Pay via Piraeus Paycenter' mod='winbankredirect'}" class="winbankredirect">
+		{l s='Pay via Piraeus Paycenter' mod='winbankredirect'}&nbsp;<span>{l s='(Redirect)' mod='winbankredirect'}</span>
 		{* Debug *}
 		{* diplay foo var *} {* {$foo} *}
 	</a>
@@ -9,7 +9,7 @@
 			Please choose first the number of installments.
 		</span>
 		<br><br><br>
-		<span style="padding-right:10px">{l s='Number of installments:' mod='winbank_redirect'}</span><input id="installments-sl" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="{$number_of_installments|escape:'htmlall':'UTF-8'}" data-slider-step="1"  form="winbankredirect-installments"  name="number_of_installments" />
+		<span style="padding-right:10px">{l s='Number of installments:' mod='winbankredirect'}</span><input id="installments-sl" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="{$number_of_installments|escape:'htmlall':'UTF-8'}" data-slider-step="1"  form="winbankredirect-installments"  name="number_of_installments" />
 	{/if}
 
 	{*<p>
@@ -19,8 +19,8 @@
 		<p class="cheque-indent">
 			<h4 class="dark">Pay via Piraeus Paycenter with installments</h4>
 			<strong class="dark">
-				{l s='Your order is qualified for payment with installments.' mod='winbank_redirect'}
-				{l s='Choose below the number of installments you want.' mod='winbank_redirect'}
+				{l s='Your order is qualified for payment with installments.' mod='winbankredirect'}
+				{l s='Choose below the number of installments you want.' mod='winbankredirect'}
 			</strong>
 		</p>
 		<span>Number of installments:</span>

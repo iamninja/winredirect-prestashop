@@ -186,14 +186,15 @@ class WinbankRedirectGetContentController
         );
         $submit_array = array(
             'submit' => array(
-                'title' => $this->module->l('Save')
+                'title' => $this->module->l('Save'),
+                'class' => 'button'
             )
         );
 
         $fields_form = array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->module->l('Piraeus Paycenter configuration '),
+                    'title' => $this->module->l('Piraeus Paycenter configuration'),
                     'icon' => 'icon-wrench'
                 ),
                 'input' => $forms_array,
